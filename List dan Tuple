@@ -1,0 +1,39 @@
+# Ikhwal Fauzi D0425002
+
+# LIST
+# Dapat diubah (mutable): bisa menambah, menghapus, atau mengubah elemen setelah dibuat.
+# Membuat list
+nama_list = ["Mangga", "Jambu", "Pisang"]
+print("List awal:", nama_list)
+
+# Menambahkan data ke list
+nama_list.append("Durian")
+print("Setelah ditambah:", nama_list)
+
+# Mengubah data di list
+nama_list[1] = "Rambutan"
+print("Setelah diubah:", nama_list)
+
+# Menghapus data dari list
+nama_list.remove("Mangga")
+print("Setelah dihapus:", nama_list)
+#Output
+#List awal: ['Mangga', 'Jambu', 'Pisang']
+#Setelah ditambah: ['Mangga', 'Jambu', 'Pisang', 'Durian']
+#Setelah diubah: ['Mangga', 'Rambutan', 'Pisang', 'Durian']
+#Setelah dihapus: ['Rambutan', 'Pisang', 'Durian']
+
+# TUPLE
+# Tidak dapat diubah (immutable): isi tidak bisa diubah setelah dibuat.
+# Membuat tuple
+nama_tuple = ("Mangga", "Jambu", "Pisang")
+print("Tuple awal:", nama_tuple)
+
+# Menampilkan isi tuple satu per satu
+print("Isi tuple:")
+for nama in nama_tuple:
+    print("-", nama)
+
+# Percobaan mengubah tuple (akan error jika diaktifkan)
+#nama_tuple[1] = "Rambutan"
+#print("Setelah diubah:", nama_tuple)

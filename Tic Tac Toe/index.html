@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Tic Tac Toe Minecraft</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ================= MENU ================= -->
+<div id="menu" class="menu-box">
+    <h1>TIC TAC TOE</h1>
+
+    <p>Mode Permainan:</p>
+    <select id="mode">
+        <option value="2p">Multiplayer</option>
+        <option value="ai">Vs AI</option>
+    </select>
+
+    <p>Tingkat Kesulitan:</p>
+    <select id="difficulty">
+        <option>Easy</option>
+        <option>Medium</option>
+        <option>Hard</option>
+    </select>
+    
+    <button onclick="startGame()">START GAME</button>
+</div>
+
+<!-- ================= GAME ================= -->
+<div id="game" class="hidden">
+    <h1 id="turnText">PLAYER X TURN</h1>
+
+    <div id="board"></div>
+
+    <img id="sticker">
+
+    <!-- TOMBOL RESET (sudah benar & akan muncul) -->
+    <button id="resetBtn" class="hidden" onclick="resetBoard()">RESET</button>
+    
+    <button id="backBtn" onclick="backToMenu()">BACK TO MENU</button>
+
+</div>
+
+<!-- FIX: SCRIPT TIDAK TERPOTONG -->
+<script src="script.js"></script>
+</body>
+</html>

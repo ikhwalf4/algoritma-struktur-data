@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Tic Tac Toe Minecraft</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ================= MENU ================= -->
+<div id="menu" class="menu-box">
+    <h1>TIC TAC TOE</h1>
+
+    <p>Mode Permainan:</p>
+    <select id="mode">
+        <option value="2p">Multiplayer</option>
+        <option value="ai">Vs AI</option>
+    </select>
+
+    <p>Tingkat Kesulitan:</p>
+    <select id="difficulty">
+        <option>Easy</option>
+        <option>Medium</option>
+        <option>Hard</option>
+    </select>
+    
+    <button onclick="startGame()">START GAME</button>
+</div>
+
+<!-- ================= GAME ================= -->
+<div id="game" class="hidden">
+    <h1 id="turnText">PLAYER X TURN</h1>
+
+    <div id="board"></div>
+
+    <img id="sticker">
+
+    <!-- TOMBOL RESET (sudah benar & akan muncul) -->
+    <button id="resetBtn" class="hidden" onclick="resetBoard()">RESET</button>
+    
+    <button id="backBtn" onclick="backToMenu()">BACK TO MENU</button>
+
+</div>
+
+<!-- FIX: SCRIPT TIDAK TERPOTONG -->
+<s
+cript src="script.js"></script>
+</body>
+</html>
+
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+body {
+    background: url('minecraft_bg.jpg');
+    background-size: cover;
+    background-position: center;
+    margin: 0;
+    font-family: 'Press Start 2P', cursive;
+    text-align: center;
+    color: white;
+}
+
+#menu, #game {
+    margin-top: 40px;
+}
+
+.menu-box {
+    background: rgba(0, 0, 0, .5);
+    padding: 20px;
+    width: 90%;
+    max-width: 400px;
+    margin: auto;
+    border-radius: 12px;
+}
+
+h1 {
+    font-size: 22px;
+    text-shadow: 3px 3px #000;
+}
+
+button {
+    background: url("stone_button.png");
+    background-size: cover;
+    width: 250px;
+    height: 60px;
+    border: none;
+    margin: 10px;
+    font-family: 'Press Start 2P';
+    color: #fff;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+select {
+    width: 260px;
+    height: 50px;
+    background: black;
+    color: white;
+    font-family: 'Press Start 2P';
+    border: 3px solid #888;
+}
+
+#board {
+    display: grid;
+    grid-template-columns: repeat(3, 100px);
+    grid-gap: 5px;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.cell {
+    width: 100px;
+    height: 100px;
+    background: rgba(0,0,0,0.5);
+    font-size: 50px;
+    color: black;
+    line-height: 100px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+#status {
+    margin-top: 20px;
+    font-size: 18px;
+}
+
+#sticker {
+    width: 150px;
+    margin-top: 15px;
+    display: none;
+}
+
+.hidden {
+    display: none;
+}
+
+#resetBtn {
+    background: url("stone_button.png");
+    background-size: cover;
+    width: 250px;
+    height: 60px;
+    border: none;
+    margin-top: 20px;
+    font-family: 'Press Start 2P';
+    font-size: 14px;
+    color: black;
+    cursor: pointer;
+}
+
+#backBtn {
+    width: 200px;
+    height: 30px;
+    background: #333;
+    border: 3px solid black;
+    color: white;
+    font-family: 'Press Start 2P', sans-serif;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+/* Background Default */
+body {
+    background-image: url("bg_grass.jpg");
+    background-size: cover;
+}
+
+/* Supaya game & menu punya background transparan */
+#menu, #game {
+    background: rgba(0,0,0,0.5);
+    padding: 20px;
+    border-radius: 10px;
+}
+.cell {
+    position: relative;
+    font-size: 0;
+}
+.cell.o::before {
+    content: "";
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    width: 60px;
+    height: 60px;
+    border: 10px solid #00e1ff;  /* biru cerah */
+    border-radius: 50%;
+}
+.cell.x::before,
+.cell.x::after {
+    content: "";
+    position: absolute;
+    top: 10px;
+    left: 45px;
+    width: 10px;
+    height: 80px;
+    background: #ff3b3
+b; /* merah */
+    border-radius: 5px;
+}
+
+.cell.x::before {
+    transform: rotate(45deg);
+}
+
+.cell.x::after {
+    transform: rotate(-45deg);
+}
+
+// =============== VARIABEL GLOBAL =================
+let board = ["", "", "", "", "", "", "", "", ""];
+let currentPlayer = "X";
+let gameOver = false;
+let mode = "2p";
+let difficulty = "Hard";
+
+// =============== MULAI GAME =================
+function startGame() {
+    mode = document.getElementById("mode").value;
+    difficulty = document.getElementById("difficulty").value;
+
+    document.getElementById("menu").classList.add("hidden");
+    document.getElementById("game").classList.remove("hidden");
+
+    generateBoard();
+}
+
+function generateBoard() {
+    let boardDiv = document.getElementById("board");
+    boardDiv.innerHTML = "";
+
+    for (let i = 0; i < 9; i++) {
+        let cell = document.createElement("div");
+        cell.classList.add("cell");
+        cell.setAttribute("data-id", i);
+        cell.onclick = () => playerMove(i);
+        boardDiv.appendChild(cell);
+    }
+}
+
+// =============== LOGIKA 2 PLAYER =================
+function playerMove(i) {
+    if (gameOver) return;
+    if (board[i] !== "") return;
+
+    board[i] = currentPlayer;
+    updateBoard();
+
+    if (checkWinner(currentPlayer)) return endGame(true);
+    if (isDraw()) return endGame(false);
+
+    currentPlayer = currentPlayer === "X" ? "O" : "X";
+    document.getElementById("turnText").innerText = `PLAYER ${currentPlayer} TURN`;
+
+    if (mode === "ai" && currentPlayer === "O") {
+        setTimeout(aiMove, 400);
+    }
+}
+
+// =============== UPDATE TAMPILAN =================
+function updateBoard() {
+    document.querySelectorAll(".cell").forEach((c, i) => {
+        c.innerText = board[i];
+
+        if (board[i] === "X") {
+            c.style.color = "red";      // X merah
+        } else if (board[i] === "O") {
+            c.style.color = "cyan";     // O biru terang
+        } else {
+            c.style.color = "white";    // kosong
+        }
+    });
+}
+
+// =============== AI MOVE =================
+function aiMove() {
+    let move;
+    if (difficulty === "Easy") {
+        move = randomMove();
+    } else if (difficulty === "Medium") {
+        move = Math.random() < 0.25 ? randomMove() : minimaxMove();
+    } else {
+        move = minimaxMove();
+    }
+
+    board[move] = "O";
+    updateBoard();
+
+    if (checkWinner("O")) return endGame(true);
+    if (isDraw()) return endGame(false);
+
+    currentPlayer = "X";
+    document.getElementById("turnText").innerText = `PLAYER X TURN`;
+}
+
+function randomMove() {
+    let empty = board.map((v, i) => v === "" ? i : null).filter(v => v !== null);
+    return empty[Math.floor(Math.random() * empty.length)];
+}
+
+// =============== MINIMAX =================
+function minimaxMove() {
+    let bestScore = -999;
+    let move = 0;
+
+    for (let i = 0; i < 9; i++) {
+        if (board[i] === "") {
+            board[i] = "O";
+            let score = minimax(false);
+            board[i] = "";
+            if (score > bestScore) {
+                bestScore = score;
+                move = i;
+            }
+        }
+    }
+    return move;
+}
+
+function minimax(isMax) {
+    if (checkWinner("O")) return 10;
+    if (checkWinner("X")) return -10;
+    if (isDraw()) return 0;
+
+    if (isMax) {
+        let best = -999;
+        for (let i = 0; i < 9; i++) {
+            if (board[i] === "") {
+                board[i] = "O";
+                best = Math.max(best, minimax(false));
+                board[i] = "";
+            }
+        }
+        return best;
+    } else {
+        let best = 999;
+        for (let i = 0; i < 9; i++) {
+            if (board[i] === "") {
+                board[i] = "X";
+                best = Math.min(best, minimax(true));
+                board[i] = "";
+            }
+        }
+        return best;
+    }
+}
+
+// =============== CEK MENANG =================
+function checkWinner(p) {
+    const win = [
+        [0,1,2],[3,4,5],[6,7,8],
+        [0,3,6],[1,4,7],[2,5,8],
+        [0,4,8],[2,4,6]
+    ];
+    return win.some(c => 
+        board[c[0]] === p && 
+        board[c[1]] === p && 
+        board[c[2]] === p
+    );
+}
+
+function isDraw() {
+    return board.every(c => c !== "");
+}
+
+// =============== AKHIR GAME =================
+function endGame(win) {
+    gameOver = true;
+
+    let sticker = document.getElementById("sticker");
+    sticker.style.display = "block";
+
+    if (win) {
+        document.getElementById("turnText").innerText = `PLAYER ${currentPlayer} WINS!`;
+        sticker.src = "winner.png";
+    } else {
+        document.getElementById("turnText").innerText = "DRAW!";
+        sticker.src = "loser.png";
+    }
+    document.getElementById("resetBtn").classList.remove("hidden");
+    
+}
+
+function resetBoard() {
+    board = ["", "", "", "", "", "", "", "", ""];
+    currentPlayer = "X";
+    gameOver = false;
+
+    document.getElementById("sticker").style.display = "none";
+    document.getElementById("resetBtn").classList.add("hidden");
+    document.getElementById("turnText").innerText = "PLAYER X TURN";
+
+    updateBoard();
+}
+
+function backToMenu() {
+    // Sembunyikan game
+    document.getElementById("game").classList.add("hidden");
+
+    // Tampilkan menu
+    document.getElementById("menu").classList.remove("hidden");
+
+    // Reset board
+    board = ["", "", "", "", "", "", "", "", ""];
+    gameOver = false;
+    currentPlayer = "X";
+
+    // Reset UI
+    document.getElementById("sticker").style.display = "none";
+    document.getElementById("resetBtn").classList.add("hidden");
+
+    updateBoard();
+}
+
+function updateBoard() {
+    document.querySelectorAll(".cell").forEach((c, i) => {
+        c.innerText = ""; // hapus teks asli
+
+        c.classList.remove("x", "o");
+
+        if (board[i] === "X") {
+            c.classList.add("x");
+        } else if (board[i] === "O") {
+            c.classList.add("o");
+        }
+    });
+}
+

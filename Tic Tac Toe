@@ -1,3 +1,7 @@
+# Game Tic Tac Toe
+# Ikhwal Fauzi
+# D0425002
+
 from tkinter import *
 import random
 import sys

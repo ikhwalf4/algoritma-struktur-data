@@ -4,7 +4,6 @@
 
 from tkinter import *
 import random
-import sys
 
 window = Tk()
 window.geometry("400x600")
@@ -13,350 +12,244 @@ window.title("Tic Tac Toe")
 HEIGHT = 2
 WIDTH = 5
 
-player = ''
-winner = ''
-possible_choices = [1, 2, 3, 4, 5, 6, 7, 8, 9]
 turn_counter = 1
-leaving_loop = False
+possible_choices = []
 multi_state = False
+difficulty = "easy"
 
-player1_score = player2_score = 0
+player1_score = 0
+player2_score = 0
+
+buttons = {}
+
+def show_menu():
+    clear_window()
+
+    Label(window, text="Tic Tac Toe", font="Times 40 bold", fg="green").pack(pady=20)
+    Label(window, text="Pilih Mode Permainan", font="Times 20 bold").pack(pady=10)
+
+    Button(window, text="Single Player", width=15, height=2,
+           command=lambda: choose_difficulty()).pack(pady=10)
+
+    Button(window, text="Multiplayer", width=15, height=2,
+           command=lambda: start_game("multi")).pack(pady=10)
 
 
+def choose_difficulty():
+    clear_window()
+
+    Label(window, text="Pilih Tingkat Kesulitan", font="Times 25 bold").pack(pady=30)
+
+    Button(window, text="Easy", width=15, height=2,
+           command=lambda: start_game("easy")).pack(pady=10)
+
+    Button(window, text="Medium", width=15, height=2,
+           command=lambda: start_game("medium")).pack(pady=10)
+
+    Button(window, text="Hard", width=15, height=2,
+           command=lambda: start_game("hard")).pack(pady=10)
+
+    Button(window, text="Back to Menu", width=15, height=2,
+           command=show_menu).pack(pady=20)
+
+def clear_window():
+    for widget in window.winfo_children():
+        widget.destroy()
+
+
+def start_game(mode):
+    global multi_state, difficulty, turn_counter, possible_choices
+
+    clear_window()
+
+    turn_counter = 1
+    possible_choices = [1,2,3,4,5,6,7,8,9]
+
+    if mode == "multi":
+        multi_state = True
+    else:
+        multi_state = False
+        difficulty = mode
+
+    Label(window, text="Tic Tac Toe", font="Times 40 bold", fg="green").pack()
+
+    game_frame = Frame(window)
+    game_frame.pack(pady=20)
+
+    pos = 1
+    for r in range(3):
+        for c in range(3):
+            btn = Button(game_frame, text='', font="Times 25 bold", width=WIDTH,
+                         height=HEIGHT, bg="white",
+                         command=lambda p=pos: btn_click(buttons[p], p))
+            btn.grid(row=r, column=c)
+            buttons[pos] = btn
+            pos += 1
+
+    bottom = Frame(window)
+    bottom.pack(pady=20)
+
+    Button(bottom, text="Back to Menu", width=15, height=2, command=show_menu).pack()
+
+    info_frame = Frame(window)
+    info_frame.pack()
+
+    global score_label
+    score_label = Label(info_frame, text=f"X : {player2_score}     O : {player1_score}",
+                        font="Times 20 bold")
+    score_label.pack()
+
+    if not multi_state:
+        computer_play()
+
+def btn_click(btn, pos):
+    global turn_counter, possible_choices
+
+    player = 'X' if turn_counter % 2 == 0 else 'O'
+    btn.config(text=player, state=DISABLED)
+
+    if pos in possible_choices:
+        possible_choices.remove(pos)
+
+    turn_counter += 1
+
+    check_winner()
+
+    if not multi_state:
+        computer_play()
+        check_winner()
 
 def computer_play():
-    global turn_counter, leaving_loop, possible_choices
-    if (turn_counter % 2) != 0:
+    global turn_counter, possible_choices
+
+    if turn_counter % 2 == 0:
+        return
+
+    if not possible_choices:
+        return
+
+    if difficulty == "easy":
         choice = random.choice(possible_choices)
-        possible_choices.remove(choice)
-        if choice == 1:
-            button1['text'] = 'O'
-            button1['state'] = DISABLED
-        elif choice == 2:
-            button2['text'] = 'O'
-            button2['state'] = DISABLED
-        elif choice == 2:
-            button2['text'] = 'O'
-            button2['state'] = DISABLED
-        elif choice == 3:
-            button3['text'] = 'O'
-            button3['state'] = DISABLED
-        elif choice == 4:
-            button4['text'] = 'O'
-            button4['state'] = DISABLED
-        elif choice == 5:
-            button5['text'] = 'O'
-            button5['state'] = DISABLED
-        elif choice == 6:
-            button6['text'] = 'O'
-            button6['state'] = DISABLED
-        elif choice == 7:
-            button7['text'] = 'O'
-            button7['state'] = DISABLED
-        elif choice == 8:
-            button8['text'] = 'O'
-            button8['state'] = DISABLED
-        elif choice == 9:
-            button9['text'] = 'O'
-            button9['state'] = DISABLED
-
-    turn_counter += 1
-        
-
-def btn_status(status):
-    button1.configure(state=status)
-    button2.configure(state=status)
-    button3.configure(state=status)
-    button4.configure(state=status)
-    button5.configure(state=status)
-    button6.configure(state=status)
-    button7.configure(state=status)
-    button8.configure(state=status)
-    button9.configure(state=status)
-
-
-def btn_click(button):
-    global player, turn_counter, possible_choices
-    if (turn_counter % 2) != 0:
-        player = 'O'
+    elif difficulty == "medium":
+        choice = medium_ai()
     else:
-        player = 'X'
+        choice = hard_ai()
 
-    
-    if player == 'O':
-        button.configure(text='O')
-    else:
-        button.configure(text='X')
-
-    if button == button1:
-        possible_choices.remove(1)
-    elif button == button2:
-        possible_choices.remove(2)
-    elif button == button3:
-        possible_choices.remove(3)
-    elif button == button4:
-        possible_choices.remove(4)
-    elif button == button5:
-        possible_choices.remove(5)
-    elif button == button6:
-        possible_choices.remove(6)
-    elif button == button7:
-        possible_choices.remove(7)
-    elif button == button8:
-        possible_choices.remove(8)
-    elif button == button9:
-        possible_choices.remove(9)
-
-    button.configure(state=DISABLED)
+    possible_choices.remove(choice)
+    buttons[choice].config(text='O', state=DISABLED)
 
     turn_counter += 1
 
-    if multi_state == True:
-        multi_player()
-        check_winner()
+def medium_ai():
+    win_moves = find_winning_moves('O')
+    if win_moves:
+        return win_moves[0]
+
+    block_moves = find_winning_moves('X')
+    if block_moves:
+        return block_moves[0]
+
+    if 5 in possible_choices:
+        return 5
+
+    return random.choice(possible_choices)
+
+def find_winning_moves(symbol):
+    moves = []
+    wins = [(1,2,3),(4,5,6),(7,8,9),
+            (1,4,7),(2,5,8),(3,6,9),
+            (1,5,9),(3,5,7)]
+
+    for a,b,c in wins:
+        line = [buttons[a]['text'], buttons[b]['text'], buttons[c]['text']]
+        if line.count(symbol) == 2 and line.count("") == 1:
+            if buttons[a]['text'] == "": moves.append(a)
+            if buttons[b]['text'] == "": moves.append(b)
+            if buttons[c]['text'] == "": moves.append(c)
+
+    return moves
+
+def hard_ai():
+    best_score = -999
+    best_move = None
+
+    for move in possible_choices:
+        buttons[move]['text'] = 'O'
+        score = minimax(False)
+        buttons[move]['text'] = ''
+
+        if score > best_score:
+            best_score = score
+            best_move = move
+
+    return best_move
+
+def minimax(is_maximizing):
+    if check_static_win('O'):
+        return 1
+    if check_static_win('X'):
+        return -1
+    if all(buttons[i]['text'] != '' for i in buttons):
+        return 0
+
+    if is_maximizing:
+        best_score = -999
+        for i in possible_choices:
+            buttons[i]['text'] = 'O'
+            score = minimax(False)
+            buttons[i]['text'] = ''
+            best_score = max(score, best_score)
+        return best_score
     else:
-        computer_play()
-        check_winner()
+        best_score = 999
+        for i in possible_choices:
+            buttons[i]['text'] = 'X'
+            score = minimax(True)
+            buttons[i]['text'] = ''
+            best_score = min(score, best_score)
+        return best_score
 
+def check_static_win(sym):
+    wins = [(1,2,3),(4,5,6),(7,8,9),
+            (1,4,7),(2,5,8),(3,6,9),
+            (1,5,9),(3,5,7)]
 
-def multi_player():
-    global multi_state
-    multi_state = True
-    if (turn_counter % 2) != 0:
-        player = 'O'
-    else:
-        player = 'X'
-
-
-def game_mode(mode):
-    global multi_state
-    btn_status(ACTIVE)
-    if mode == 'single':
-        multi_state = False
-        computer_play()
-    else:
-        multi_state = True
-        multi_player()
-
-    single_btn.configure(state=DISABLED)
-    multi_btn.configure(state=DISABLED)
-
-
-def end_game():
-    global possible_choices
-    btn_status(DISABLED)
-    possible_choices = []
-
-
-def update_score(player):
-    global  player1_score, player2_score
-    if player == 'Player1':
-        player1_score += 1
-    elif player == 'Player2':
-        player2_score += 1
-
-    score_label.configure(text = f"X : {player2_score}            O :  {player1_score}")
+    for a,b,c in wins:
+        if buttons[a]['text'] == sym and buttons[b]['text'] == sym and buttons[c]['text'] == sym:
+            return True
+    return False
 
 
 def check_winner():
-    global winner
-    winner = ''
-    if button1['text'] == 'X' and button2['text'] == 'X' and button3['text'] == 'X':
-        winner = 'Player2'
-        button1['bg'] = 'red'
-        button2['bg'] = 'red'
-        button3['bg'] = 'red'
-        update_score(winner)
-        end_game()
-    elif button4['text'] == 'X' and button5['text'] == 'X' and button6['text'] == 'X':
-        winner = 'Player2'
-        button4['bg'] = 'red'
-        button5['bg'] = 'red'
-        button6['bg'] = 'red'
-        update_score(winner)
-        end_game()
-    elif button7['text'] == 'X' and button8['text'] == 'X' and button9['text'] == 'X':
-        winner = 'Player2'
-        button7['bg'] = 'red'
-        button8['bg'] = 'red'
-        button9['bg'] = 'red'
-        update_score(winner)
-        end_game()
-    elif button1['text'] == 'X' and button4['text'] == 'X' and button7['text'] == 'X':
-        winner = 'Player2'
-        button1['bg'] = 'red'
-        button4['bg'] = 'red'
-        button7['bg'] = 'red'
-        update_score(winner)
-        end_game()
-    elif button2['text'] == 'X' and button5['text'] == 'X' and button8['text'] == 'X':
-        winner = 'Player2'
-        button2['bg'] = 'red'
-        button5['bg'] = 'red'
-        button8['bg'] = 'red'
-        update_score(winner)
-        end_game()
-    elif button3['text'] == 'X' and button6['text'] == 'X' and button9['text'] == 'X':
-        winner = 'Player2'
-        button3['bg'] = 'red'
-        button6['bg'] = 'red'
-        button9['bg'] = 'red'
-        update_score(winner)
-        end_game()
-    elif button1['text'] == 'X' and button5['text'] == 'X' and button9['text'] == 'X':
-        winner = 'Player2'
-        button1['bg'] = 'red'
-        button5['bg'] = 'red'
-        button9['bg'] = 'red'
-        update_score(winner)
-        end_game()
-    elif button3['text'] == 'X' and button5['text'] == 'X' and button7['text'] == 'X':
-        winner = 'Player2'
-        button3['bg'] = 'red'
-        button5['bg'] = 'red'
-        button7['bg'] = 'red'
-        update_score(winner)
-        end_game()
-    
-    # Second Player
-    elif button1['text'] == 'O' and button2['text'] == 'O' and button3['text'] == 'O':
-        winner = 'Player1'
-        button1['bg'] = 'red'
-        button2['bg'] = 'red'
-        button3['bg'] = 'red'
-        update_score(winner)
-        end_game()
-       
-    elif button4['text'] == 'O' and button5['text'] == 'O' and button6['text'] == 'O':
-        winner = 'Player1'
-        button4['bg'] = 'red'
-        button5['bg'] = 'red'
-        button6['bg'] = 'red'
-        update_score(winner)
-        end_game()
-    elif button7['text'] == 'O' and button8['text'] == 'O' and button9['text'] == 'O':
-        winner = 'Player1'
-        button7['bg'] = 'red'
-        button8['bg'] = 'red'
-        button9['bg'] = 'red'
-        update_score(winner)
-        end_game()
-    elif button1['text'] == 'O' and button4['text'] == 'O' and button7['text'] == 'O':
-        winner = 'Player1'
-        button1['bg'] = 'red'
-        button4['bg'] = 'red'
-        button7['bg'] = 'red'
-        update_score(winner)
-        end_game()
-    elif button2['text'] == 'O' and button5['text'] == 'O' and button8['text'] == 'O':
-        winner = 'Player1'
-        button2['bg'] = 'red'
-        button5['bg'] = 'red'
-        button8['bg'] = 'red'
-        update_score(winner)
-        end_game()
-    elif button3['text'] == 'O' and button6['text'] == 'O' and button9['text'] == 'O':
-        winner = 'Player1'
-        button3['bg'] = 'red'
-        button6['bg'] = 'red'
-        button9['bg'] = 'red'
-        update_score(winner)
-        end_game()
-    elif button1['text'] == 'O' and button5['text'] == 'O' and button9['text'] == 'O':
-        winner = 'Player1'
-        button1['bg'] = 'red'
-        button5['bg'] = 'red'
-        button9['bg'] = 'red'
-        update_score(winner)
-        end_game()
-    elif button3['text'] == 'O' and button5['text'] == 'O' and button7['text'] == 'O':
-        winner = 'Player1'
-        button3['bg'] = 'red'
-        button5['bg'] = 'red'
-        button7['bg'] = 'red'
-        update_score(winner)
-        end_game()
-    
+    global player1_score, player2_score
 
-def restart_game():
-    global possible_choices, winner
-    possible_choices = [1, 2, 3, 4, 5, 6, 7, 8, 9]
-    winner = ''
-    turn_counter = 1
-    single_btn['state'] = ACTIVE
-    multi_btn['state'] = ACTIVE
-    button1['text'] = ''
-    button2['text'] = ''
-    button3['text'] = ''
-    button4['text'] = ''
-    button5['text'] = ''
-    button6['text'] = ''
-    button7['text'] = ''
-    button8['text'] = ''
-    button9['text'] = ''
-    button1['bg'] = 'white'
-    button2['bg'] = 'white'
-    button3['bg'] = 'white'
-    button4['bg'] = 'white'
-    button5['bg'] = 'white'
-    button6['bg'] = 'white'
-    button7['bg'] = 'white'
-    button8['bg'] = 'white'
-    button9['bg'] = 'white'
+    wins = [(1,2,3),(4,5,6),(7,8,9),
+            (1,4,7),(2,5,8),(3,6,9),
+            (1,5,9),(3,5,7)]
+
+    for a,b,c in wins:
+        line = buttons[a]["text"] + buttons[b]["text"] + buttons[c]["text"]
+
+        if line == "XXX":
+            buttons[a].config(bg='red')
+            buttons[b].config(bg='red')
+            buttons[c].config(bg='red')
+            player2_score += 1
+            score_label.config(text=f"X : {player2_score}     O : {player1_score}")
+            freeze_board()
+
+        elif line == "OOO":
+            buttons[a].config(bg='red')
+            buttons[b].config(bg='red')
+            buttons[c].config(bg='red')
+            player1_score += 1
+            score_label.config(text=f"X : {player2_score}     O : {player1_score}")
+            freeze_board()
 
 
+def freeze_board():
+    for i in buttons:
+        buttons[i].config(state=DISABLED)
 
-label = Label(window, text="Tic Tac Toe", font="Times 40 bold", fg="black")
-
-label.pack()
-
-top_frame = Frame(window, width=100)
-top_frame.pack(side=TOP, pady=10)
-
-single_btn = Button(top_frame, text="Single Player", width=10, command=lambda: game_mode('single'))
-single_btn.pack(side=LEFT, padx=10)
-
-multi_btn = Button(top_frame, text="Multi Player", width=10, command=lambda: game_mode('multi'))
-multi_btn.pack(side=LEFT, padx=10)
-
-frame = Frame(window, height=100, width=100)
-frame.pack()
-
-button1 = Button(frame, text='', font="Times 25 bold", width=WIDTH, height=HEIGHT, command=lambda: btn_click(button1))
-button2 = Button(frame, text='', font="Times 25 bold", width=WIDTH, height=HEIGHT, command=lambda: btn_click(button2))
-button3 = Button(frame, text='', font="Times 25 bold", width=WIDTH, height=HEIGHT, command=lambda: btn_click(button3))
-button4 = Button(frame, text='', font="Times 25 bold", width=WIDTH, height=HEIGHT, command=lambda: btn_click(button4))
-button5 = Button(frame, text='', font="Times 25 bold", width=WIDTH, height=HEIGHT, command=lambda: btn_click(button5))
-button6 = Button(frame, text='', font="Times 25 bold", width=WIDTH, height=HEIGHT, command=lambda: btn_click(button6))
-button7 = Button(frame, text='', font="Times 25 bold", width=WIDTH, height=HEIGHT, command=lambda: btn_click(button7))
-button8 = Button(frame, text='', font="Times 25 bold", width=WIDTH, height=HEIGHT, command=lambda: btn_click(button8))
-button9 = Button(frame, text='', font="Times 25 bold", width=WIDTH, height=HEIGHT, command=lambda: btn_click(button9))
-
-button1.grid(row=0, column=0)
-button2.grid(row=0, column=1)
-button3.grid(row=0, column=2)
-button4.grid(row=1, column=0)
-button5.grid(row=1, column=1)
-button6.grid(row=1, column=2)
-button7.grid(row=2, column=0)
-button8.grid(row=2, column=1)
-button9.grid(row=2, column=2)
-
-lower_frame = Frame(window, width=10)
-lower_frame.pack(pady=10)
-
-restart_btn = Button(lower_frame, text="Restart", width=10, command=restart_game)
-restart_btn.pack(side=LEFT, padx=10)
-
-end_btn = Button(lower_frame, text="End", width=10, command=sys.exit)
-end_btn.pack(side=RIGHT, padx=10)
-
-score_frame = Frame(window, width=10)
-score_frame.pack(pady=10)
-
-score_label = Label(score_frame, text="X : 0       O : 0", font="Times 20 bold")
-score_label.pack()
-
-btn_status(DISABLED)
-
+show_menu()
 window.mainloop()

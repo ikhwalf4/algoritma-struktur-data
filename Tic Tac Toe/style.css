@@ -1,0 +1,158 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+body {
+    background: url('minecraft_bg.jpg');
+    background-size: cover;
+    background-position: center;
+    margin: 0;
+    font-family: 'Press Start 2P', cursive;
+    text-align: center;
+    color: white;
+}
+
+#menu, #game {
+    margin-top: 40px;
+}
+
+.menu-box {
+    background: rgba(0, 0, 0, .5);
+    padding: 20px;
+    width: 90%;
+    max-width: 400px;
+    margin: auto;
+    border-radius: 12px;
+}
+
+h1 {
+    font-size: 22px;
+    text-shadow: 3px 3px #000;
+}
+
+button {
+    background: url("stone_button.png");
+    background-size: cover;
+    width: 250px;
+    height: 60px;
+    border: none;
+    margin: 10px;
+    font-family: 'Press Start 2P';
+    color: #fff;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+select {
+    width: 260px;
+    height: 50px;
+    background: black;
+    color: white;
+    font-family: 'Press Start 2P';
+    border: 3px solid #888;
+}
+
+#board {
+    display: grid;
+    grid-template-columns: repeat(3, 100px);
+    grid-gap: 5px;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.cell {
+    width: 100px;
+    height: 100px;
+    background: rgba(0,0,0,0.5);
+    font-size: 50px;
+    color: black;
+    line-height: 100px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+#status {
+    margin-top: 20px;
+    font-size: 18px;
+}
+
+#sticker {
+    width: 150px;
+    margin-top: 15px;
+    display: none;
+}
+
+.hidden {
+    display: none;
+}
+
+#resetBtn {
+    background: url("stone_button.png");
+    background-size: cover;
+    width: 250px;
+    height: 60px;
+    border: none;
+    margin-top: 20px;
+    font-family: 'Press Start 2P';
+    font-size: 14px;
+    color: black;
+    cursor: pointer;
+}
+
+#backBtn {
+    width: 200px;
+    height: 30px;
+    background: #333;
+    border: 3px solid black;
+    color: white;
+    font-family: 'Press Start 2P', sans-serif;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+/* Background Default */
+body {
+    background-image: url("bg_grass.jpg");
+    background-size: cover;
+}
+
+/* Supaya game & menu punya background transparan */
+#menu, #game {
+    background: rgba(0,0,0,0.5);
+    padding: 20px;
+    border-radius: 10px;
+}
+.cell {
+    position: relative;
+    font-size: 0;
+}
+.cell.o::before {
+    content: "";
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    width: 60px;
+    height: 60px;
+    border: 10px solid #00e1ff;  /* biru cerah */
+    border-radius: 50%;
+}
+.cell.x::before,
+.cell.x::after {
+    content: "";
+    position: absolute;
+    top: 10px;
+    left: 45px;
+    width: 10px;
+    height: 80px;
+    background: #ff3b3b; /* merah */
+    border-radius: 5px;
+}
+
+.cell.x::before {
+    transform: rotate(45deg);
+}
+
+.cell.x::after {
+    transform: rotate(-45deg);
+}
+
+
+  

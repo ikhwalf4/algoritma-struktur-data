@@ -155,7 +155,7 @@ def update_score(player):
     elif player == 'Player2':
         player2_score += 1
 
-    score_label.configure(text = f"O: {player1_score} :: {player2_score} :X")
+    score_label.configure(text = f"X : {player2_score}            O :  {player1_score}")
 
 
 def check_winner():
@@ -306,7 +306,7 @@ def restart_game():
 
 
 
-label = Label(window, text="Tic Tac Toe", font="Times 40 bold", fg="green")
+label = Label(window, text="Tic Tac Toe", font="Times 40 bold", fg="black")
 
 label.pack()
 
@@ -354,7 +354,7 @@ end_btn.pack(side=RIGHT, padx=10)
 score_frame = Frame(window, width=10)
 score_frame.pack(pady=10)
 
-score_label = Label(score_frame, text="X : 0 :: 0: O", font="Times 20 bold")
+score_label = Label(score_frame, text="X : 0       O : 0", font="Times 20 bold")
 score_label.pack()
 
 btn_status(DISABLED)

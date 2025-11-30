@@ -2,254 +2,282 @@
 # Ikhwal Fauzi
 # D0425002
 
-from tkinter import *
+import tkinter as tk
 import random
 
-window = Tk()
-window.geometry("400x600")
+window = tk.Tk()
 window.title("Tic Tac Toe")
+window.geometry("420x550")
+window.configure(bg="#1e272e")
 
-HEIGHT = 2
-WIDTH = 5
-
-turn_counter = 1
-possible_choices = []
-multi_state = False
-difficulty = "easy"
-
-player1_score = 0
-player2_score = 0
-
+current_player = "X"
+game_mode = ""
+difficulty = "Easy"
 buttons = {}
+frame_menu = None
+frame_game = None
+
+#   MENGGAMBAR X DAN O
+
+def draw_X(canvas):
+    canvas.delete("all")
+    canvas.create_line(20, 20, 100, 100, width=10, fill="red", tag="X")
+    canvas.create_line(100, 20, 20, 100, width=10, fill="red", tag="X")
+
+
+def draw_O(canvas):
+    canvas.delete("all")
+    canvas.create_oval(20, 20, 100, 100, width=10, outline="blue", tag="O")
+
+#        MENU SYSTEM
 
 def show_menu():
-    clear_window()
+    global frame_menu, frame_game
+    if frame_game:
+        frame_game.destroy()
 
-    Label(window, text="Tic Tac Toe", font="Times 40 bold", fg="green").pack(pady=20)
-    Label(window, text="Pilih Mode Permainan", font="Times 20 bold").pack(pady=10)
+    frame_menu = tk.Frame(window, bg="#1e272e")
+    frame_menu.pack(expand=True)
 
-    Button(window, text="Single Player", width=15, height=2,
-           command=lambda: choose_difficulty()).pack(pady=10)
+    tk.Label(frame_menu, text="TIC TAC TOE", fg="white", bg="#1e272e",
+             font=("Times 30 bold")).pack(pady=10)
 
-    Button(window, text="Multiplayer", width=15, height=2,
-           command=lambda: start_game("multi")).pack(pady=10)
+    tk.Label(frame_menu, text="Mode Permainan", fg="#d2dae2", bg="#1e272e",
+             font=("Times", 15)).pack(pady=20)
 
+    tk.Button(frame_menu, text="Single Player", font=("Courier", 12),
+              bg="#FF0000", fg="white", width=15, relief="flat",
+              command=lambda: choose_difficulty("single")).pack(pady=5)
 
-def choose_difficulty():
-    clear_window()
+    tk.Button(frame_menu, text="Multiplayer", font=("Courier", 12),
+              bg="#3498db", fg="white", width=15, relief="flat",
+              command=lambda: start_game("multi")).pack(pady=5)
 
-    Label(window, text="Pilih Tingkat Kesulitan", font="Times 25 bold").pack(pady=30)
+def choose_difficulty(mode):
+    global frame_menu, game_mode
+    game_mode = mode
 
-    Button(window, text="Easy", width=15, height=2,
-           command=lambda: start_game("easy")).pack(pady=10)
-
-    Button(window, text="Medium", width=15, height=2,
-           command=lambda: start_game("medium")).pack(pady=10)
-
-    Button(window, text="Hard", width=15, height=2,
-           command=lambda: start_game("hard")).pack(pady=10)
-
-    Button(window, text="Back to Menu", width=15, height=2,
-           command=show_menu).pack(pady=20)
-
-def clear_window():
-    for widget in window.winfo_children():
+    for widget in frame_menu.winfo_children():
         widget.destroy()
 
+    tk.Label(frame_menu, text="Tingkat Kesulitan", fg="white", bg="#1e272e",
+             font=("Times 20 bold")).pack(pady=20)
+
+    tk.Button(frame_menu, text="Easy", width=15, bg="#2ecc71", fg="white",
+              font=("Courier", 14),
+              command=lambda: start_game_with_difficulty("Easy")).pack(pady=5)
+
+    tk.Button(frame_menu, text="Medium", width=15, bg="#f1c40f", fg="white",
+              font=("Courier", 14),
+              command=lambda: start_game_with_difficulty("Medium")).pack(pady=5)
+
+    tk.Button(frame_menu, text="Hard", width=15, bg="#e74c3c", fg="white",
+              font=("Courier", 14),
+              command=lambda: start_game_with_difficulty("Hard")).pack(pady=5)
+
+def start_game_with_difficulty(dif):
+    global difficulty
+    difficulty = dif
+    start_game("single")
 
 def start_game(mode):
-    global multi_state, difficulty, turn_counter, possible_choices
+    global frame_menu, frame_game, game_mode, buttons, current_player
 
-    clear_window()
+    game_mode = mode
+    current_player = "X"
+    buttons = {}
 
-    turn_counter = 1
-    possible_choices = [1,2,3,4,5,6,7,8,9]
+    if frame_menu:
+        frame_menu.destroy()
 
-    if mode == "multi":
-        multi_state = True
-    else:
-        multi_state = False
-        difficulty = mode
+    frame_game = tk.Frame(window, bg="#1e272e")
+    frame_game.pack(expand=True)
 
-    Label(window, text="Tic Tac Toe", font="Times 40 bold", fg="green").pack()
+    tk.Label(frame_game, text="Tic Tac Toe", fg="white", bg="#1e272e",
+             font=("Times", 28, "bold")).pack(pady=10)
 
-    game_frame = Frame(window)
-    game_frame.pack(pady=20)
+    board = tk.Frame(frame_game, bg="#1e272e")
+    board.pack()
 
-    pos = 1
-    for r in range(3):
-        for c in range(3):
-            btn = Button(game_frame, text='', font="Times 25 bold", width=WIDTH,
-                         height=HEIGHT, bg="white",
-                         command=lambda p=pos: btn_click(buttons[p], p))
-            btn.grid(row=r, column=c)
-            buttons[pos] = btn
-            pos += 1
+    for i in range(1, 10):
+        c = tk.Canvas(board, width=120, height=120,
+                      bg="#d2dae2", highlightthickness=2,
+                      highlightbackground="#888")
+        c.grid(row=(i - 1) // 3, column=(i - 1) % 3, padx=5, pady=5)
+        c.bind("<Button-1>", lambda e, i=i: click(i))
+        buttons[i] = c
 
-    bottom = Frame(window)
-    bottom.pack(pady=20)
+    bot_frame = tk.Frame(frame_game, bg="#1e272e")
+    bot_frame.pack(pady=20)
 
-    Button(bottom, text="Back to Menu", width=15, height=2, command=show_menu).pack()
+    tk.Button(bot_frame, text="Reset", bg="#34ace0", fg="white",
+              font=("Courier", 12), width=12,
+              command=reset_board).grid(row=0, column=0, padx=10)
 
-    info_frame = Frame(window)
-    info_frame.pack()
+    tk.Button(bot_frame, text="Back to Menu", bg="#ff793f", fg="white",
+              font=("Courier", 12), width=12,
+              command=show_menu).grid(row=0, column=1, padx=10)
 
-    global score_label
-    score_label = Label(info_frame, text=f"X : {player2_score}     O : {player1_score}",
-                        font="Times 20 bold")
-    score_label.pack()
+#          LOGIKA GAME
 
-    if not multi_state:
-        computer_play()
+def click(i):
+    global current_player
 
-def btn_click(btn, pos):
-    global turn_counter, possible_choices
-
-    player = 'X' if turn_counter % 2 == 0 else 'O'
-    btn.config(text=player, state=DISABLED)
-
-    if pos in possible_choices:
-        possible_choices.remove(pos)
-
-    turn_counter += 1
-
-    check_winner()
-
-    if not multi_state:
-        computer_play()
-        check_winner()
-
-def computer_play():
-    global turn_counter, possible_choices
-
-    if turn_counter % 2 == 0:
+    canvas = buttons[i]
+    if canvas.find_all():
         return
 
-    if not possible_choices:
+# === Multiplayer ===
+    if game_mode == "multi":
+        if current_player == "X":
+            draw_X(canvas)
+        else:
+            draw_O(canvas)
+
+        if check_winner():
+            return
+
+        switch_player()
         return
 
-    if difficulty == "easy":
-        choice = random.choice(possible_choices)
-    elif difficulty == "medium":
-        choice = medium_ai()
-    else:
-        choice = hard_ai()
+# === Single Player ===
+    draw_X(canvas)
 
-    possible_choices.remove(choice)
-    buttons[choice].config(text='O', state=DISABLED)
+    if check_winner():
+        return
 
-    turn_counter += 1
+    window.after(300, ai_turn)
 
-def medium_ai():
-    win_moves = find_winning_moves('O')
-    if win_moves:
-        return win_moves[0]
+def switch_player():
+    global current_player
+    current_player = "O" if current_player == "X" else "X"
 
-    block_moves = find_winning_moves('X')
-    if block_moves:
-        return block_moves[0]
+def ai_best_move(block_only=False):
+    combos = [
+        (1,2,3),(4,5,6),(7,8,9),
+        (1,4,7),(2,5,8),(3,6,9),
+        (1,5,9),(3,5,7)
+    ]
 
-    if 5 in possible_choices:
+    # --- Cari kemenangan AI (O) ---
+    for a,b,c in combos:
+        line = [a,b,c]
+        vals = [get_symbol(buttons[x]) for x in line]
+        if vals.count("O") == 2 and vals.count("") == 1:
+            return line[vals.index("")]
+
+    # --- Blok kemenangan player (X) ---
+    for a,b,c in combos:
+        line = [a,b,c]
+        vals = [get_symbol(buttons[x]) for x in line]
+        if vals.count("X") == 2 and vals.count("") == 1:
+            return line[vals.index("")]
+
+    if block_only:
+        return random.choice([i for i in buttons if not buttons[i].find_all()])
+
+    # --- Ambil center ---
+    if get_symbol(buttons[5]) == "":
         return 5
 
-    return random.choice(possible_choices)
+    # --- Ambil corner ---
+    corners = [i for i in [1,3,7,9] if get_symbol(buttons[i]) == ""]
+    if corners:
+        return random.choice(corners)
 
-def find_winning_moves(symbol):
-    moves = []
-    wins = [(1,2,3),(4,5,6),(7,8,9),
-            (1,4,7),(2,5,8),(3,6,9),
-            (1,5,9),(3,5,7)]
+    # --- Pilih random ---
+    empty = [i for i in buttons if not buttons[i].find_all()]
+    return random.choice(empty)
 
-    for a,b,c in wins:
-        line = [buttons[a]['text'], buttons[b]['text'], buttons[c]['text']]
-        if line.count(symbol) == 2 and line.count("") == 1:
-            if buttons[a]['text'] == "": moves.append(a)
-            if buttons[b]['text'] == "": moves.append(b)
-            if buttons[c]['text'] == "": moves.append(c)
+def ai_turn():
+    empty = [i for i, c in buttons.items() if not c.find_all()]
+    if not empty:
+        check_draw()
+        return
 
-    return moves
+# EASY MODE  
+    if difficulty == "Easy":
+        move = random.choice(empty)
+# MEDIUM MODE    
+    elif difficulty == "Medium":
+        # 50% bermain pintar, 50% random
+        if random.random() < 0.5:
+            move = random.choice(empty)
+        else:
+            move = ai_best_move(block_only=True)
 
-def hard_ai():
-    best_score = -999
-    best_move = None
+# HARD MODE
+    
+    elif difficulty == "Hard":
+        move = ai_best_move(block_only=False)
 
-    for move in possible_choices:
-        buttons[move]['text'] = 'O'
-        score = minimax(False)
-        buttons[move]['text'] = ''
-
-        if score > best_score:
-            best_score = score
-            best_move = move
-
-    return best_move
-
-def minimax(is_maximizing):
-    if check_static_win('O'):
-        return 1
-    if check_static_win('X'):
-        return -1
-    if all(buttons[i]['text'] != '' for i in buttons):
-        return 0
-
-    if is_maximizing:
-        best_score = -999
-        for i in possible_choices:
-            buttons[i]['text'] = 'O'
-            score = minimax(False)
-            buttons[i]['text'] = ''
-            best_score = max(score, best_score)
-        return best_score
     else:
-        best_score = 999
-        for i in possible_choices:
-            buttons[i]['text'] = 'X'
-            score = minimax(True)
-            buttons[i]['text'] = ''
-            best_score = min(score, best_score)
-        return best_score
+        move = random.choice(empty)
 
-def check_static_win(sym):
-    wins = [(1,2,3),(4,5,6),(7,8,9),
-            (1,4,7),(2,5,8),(3,6,9),
-            (1,5,9),(3,5,7)]
+    draw_O(buttons[move])
 
-    for a,b,c in wins:
-        if buttons[a]['text'] == sym and buttons[b]['text'] == sym and buttons[c]['text'] == sym:
-            return True
-    return False
+    if check_winner():
+        return
 
+    check_draw()
+
+def check_draw():
+    if all(buttons[i].find_all() for i in buttons):
+        show_popup("Seri!")
+
+def get_symbol(canvas):
+    items = canvas.find_all()
+    if not items:
+        return ""
+    tags = canvas.gettags(items[0])
+    return tags[0] if tags else ""
 
 def check_winner():
-    global player1_score, player2_score
+    combos = [
+        (1,2,3),(4,5,6),(7,8,9),
+        (1,4,7),(2,5,8),(3,6,9),
+        (1,5,9),(3,5,7)
+    ]
 
-    wins = [(1,2,3),(4,5,6),(7,8,9),
-            (1,4,7),(2,5,8),(3,6,9),
-            (1,5,9),(3,5,7)]
+    for a, b, c in combos:
+        A = get_symbol(buttons[a])
+        B = get_symbol(buttons[b])
+        C = get_symbol(buttons[c])
 
-    for a,b,c in wins:
-        line = buttons[a]["text"] + buttons[b]["text"] + buttons[c]["text"]
+        if A != "" and A == B == C:
+            show_popup(f"{A} Menang!")
+            return True
 
-        if line == "XXX":
-            buttons[a].config(bg='red')
-            buttons[b].config(bg='red')
-            buttons[c].config(bg='red')
-            player2_score += 1
-            score_label.config(text=f"X : {player2_score}     O : {player1_score}")
-            freeze_board()
+    check_draw()
+    return False
+    
+# POPUP CENTER
 
-        elif line == "OOO":
-            buttons[a].config(bg='red')
-            buttons[b].config(bg='red')
-            buttons[c].config(bg='red')
-            player1_score += 1
-            score_label.config(text=f"X : {player2_score}     O : {player1_score}")
-            freeze_board()
+def show_popup(msg):
+    popup = tk.Toplevel(window)
+    popup.title("Hasil")
+    popup.geometry("250x140+{}+{}".format(
+        window.winfo_x() + 225,
+        window.winfo_y() + 640
+    ))
+    popup.configure(bg="#1e272e")
 
+    tk.Label(popup, text=msg, fg="white", bg="#1e272e",
+             font=("Palatino", 18, "bold")).pack(pady=20)
 
-def freeze_board():
+    tk.Button(popup, text="OK", bg="#706fd3", fg="white",
+              font=("Times", 9), command=popup.destroy).pack()
+
     for i in buttons:
-        buttons[i].config(state=DISABLED)
+        buttons[i].unbind("<Button-1>")
+
+def reset_board():
+    global current_player
+    current_player = "X"
+
+    for i, c in buttons.items():
+        c.delete("all")
+        c.bind("<Button-1>", lambda e, i=i: click(i))
 
 show_menu()
 window.mainloop()

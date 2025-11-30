@@ -260,7 +260,7 @@ def check_winner():
 # POPUP ===========
 def show_popup(msg):
     popup = tk.Toplevel(window)
-    popup.title("Hasil")
+    popup.title("")
     popup.geometry("250x140+{}+{}".format(
         window.winfo_x() + 225,
         window.winfo_y() + 640

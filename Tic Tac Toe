@@ -266,7 +266,7 @@ def show_popup(msg):
              font=("Palatino", 18, "bold")).pack(pady=20)
 
     tk.Button(popup, text="OK", bg="#2c3e50", fg="white",
-              font=("Times", 9), command=popup.destroy).pack()
+             font=("Times", 9), command=lambda: [popup.destroy(), reset_board()]).pack()
 
     for i in buttons:
         buttons[i].unbind("<Button-1>")

@@ -265,7 +265,7 @@ def show_popup(msg):
     tk.Label(popup, text=msg, fg="white", bg="#1e272e",
              font=("Palatino", 18, "bold")).pack(pady=20)
 
-    tk.Button(popup, text="OK", bg="#706fd3", fg="white",
+    tk.Button(popup, text="OK", bg="#2c3e50", fg="white",
               font=("Times", 9), command=popup.destroy).pack()
 
     for i in buttons:

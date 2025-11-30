@@ -17,30 +17,35 @@ buttons = {}
 frame_menu = None
 frame_game = None
 
-#   MENGGAMBAR X DAN O
-
+#   MENGGAMBAR X DAN O =======
 def draw_X(canvas):
     canvas.delete("all")
-    canvas.create_line(20, 20, 100, 100, width=10, fill="red", tag="X")
-    canvas.create_line(100, 20, 20, 100, width=10, fill="red", tag="X")
+    canvas.create_line(20, 20, 130, 130, width=20, fill="red", tag="X")
+    canvas.create_line(130, 20, 20, 130, width=20, fill="red", tag="X")
 
 
 def draw_O(canvas):
     canvas.delete("all")
-    canvas.create_oval(20, 20, 100, 100, width=10, outline="blue", tag="O")
+    canvas.create_oval(20, 20, 130, 130, width=20, outline="blue", tag="O")
 
-#        MENU SYSTEM
-
+#   MENU SYSTEM  =======
 def show_menu():
     global frame_menu, frame_game
+    # Hapus frame game jika ada
     if frame_game:
         frame_game.destroy()
+        frame_game = None
 
+    # Hapus frame menu lama jika ada
+    if frame_menu:
+        frame_menu.destroy()
+
+    # Buat frame menu baru
     frame_menu = tk.Frame(window, bg="#1e272e")
     frame_menu.pack(expand=True)
 
     tk.Label(frame_menu, text="TIC TAC TOE", fg="white", bg="#1e272e",
-             font=("Times 30 bold")).pack(pady=10)
+             font=("Times", 30, "bold")).pack(pady=10)
 
     tk.Label(frame_menu, text="Mode Permainan", fg="#d2dae2", bg="#1e272e",
              font=("Times", 15)).pack(pady=20)
@@ -74,6 +79,10 @@ def choose_difficulty(mode):
     tk.Button(frame_menu, text="Hard", width=15, bg="#e74c3c", fg="white",
               font=("Courier", 14),
               command=lambda: start_game_with_difficulty("Hard")).pack(pady=5)
+     
+    tk.Button(frame_menu, text="Back to Menu", width=15, bg="#ff793f", fg="white",
+          font=("Courier", 14),
+          command=show_menu).pack(pady=20)
 
 def start_game_with_difficulty(dif):
     global difficulty
@@ -100,7 +109,7 @@ def start_game(mode):
     board.pack()
 
     for i in range(1, 10):
-        c = tk.Canvas(board, width=120, height=120,
+        c = tk.Canvas(board, width=150, height=150,
                       bg="#d2dae2", highlightthickness=2,
                       highlightbackground="#888")
         c.grid(row=(i - 1) // 3, column=(i - 1) % 3, padx=5, pady=5)
@@ -118,8 +127,7 @@ def start_game(mode):
               font=("Courier", 12), width=12,
               command=show_menu).grid(row=0, column=1, padx=10)
 
-#          LOGIKA GAME
-
+#   LOGIKA GAME  ========
 def click(i):
     global current_player
 
@@ -195,19 +203,17 @@ def ai_turn():
         check_draw()
         return
 
-# EASY MODE  
+# EASY MODE  =======
     if difficulty == "Easy":
         move = random.choice(empty)
-# MEDIUM MODE    
+# MEDIUM MODE   ========
     elif difficulty == "Medium":
         # 50% bermain pintar, 50% random
         if random.random() < 0.5:
             move = random.choice(empty)
         else:
             move = ai_best_move(block_only=True)
-
-# HARD MODE
-    
+# HARD MODE   ========
     elif difficulty == "Hard":
         move = ai_best_move(block_only=False)
 
@@ -251,8 +257,7 @@ def check_winner():
     check_draw()
     return False
     
-# POPUP CENTER
-
+# POPUP ===========
 def show_popup(msg):
     popup = tk.Toplevel(window)
     popup.title("Hasil")

@@ -1,0 +1,10 @@
+from typing import Union
+
+# Variabel dapat berisi integer atau string
+data: Union[int, str]
+
+data = 10
+print(data)
+
+data = "sepuluh"
+print(data)

@@ -1,7 +1,7 @@
 #Ikhwal Fauzi
 #D0425002
 
-# Character (berupa 1 karakter huruf)
+# Character (berupa string dengan 1 karakter huruf)
 inisial = 'I'
 
 # Integer

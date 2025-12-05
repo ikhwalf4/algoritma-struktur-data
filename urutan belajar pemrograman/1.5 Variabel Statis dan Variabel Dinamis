@@ -1,0 +1,16 @@
+#Variabel Statis
+def counter():
+    # membuat variabel 'static' menggunakan atribut fungsi
+    if not hasattr(counter, "nilai"):
+        counter.nilai = 0
+    counter.nilai += 1
+    return counter.nilai
+
+#Variabel Dinamis
+print(counter())  # 1
+print(counter())  # 2
+print(counter())  # 3
+
+x = 10        # awalnya integer
+x = "teks"    # berubah menjadi string
+print(x)

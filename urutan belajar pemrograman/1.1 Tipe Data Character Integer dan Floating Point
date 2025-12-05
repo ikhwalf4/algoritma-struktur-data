@@ -1,13 +1,13 @@
 #Ikhwal Fauzi
 #D0425002
 
+# Character (berupa 1 karakter huruf)
+inisial = 'I'
+
 # Integer
-umur = 20          # tipe data bilangan bulat
+umur = 18          # tipe data bilangan bulat
 
 # Floating point
-tinggi = 170.5     # tipe data pecahan/desimal
-
-# Character (di Python tidak ada char, tapi string 1 karakter)
-inisial = 'A'
+tinggi = 162.5     # tipe data pecahan/desimal
 
 print(umur, tinggi, inisial)

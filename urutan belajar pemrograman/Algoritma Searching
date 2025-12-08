@@ -1,1 +1,50 @@
+# Algoritma Linear Search
+# Mencari data dengan cara memeriksa satu per satu
+
+def linear_search(data, target):
+    for i in range(len(data)):
+        if data[i] == target:
+            return i  # mengembalikan posisi jika ditemukan
+    return -1       # mengembalikan -1 jika tidak ada
+
+# Contoh penggunaan
+angka = [12, 5, 9, 20, 3, 15]
+cari = 20
+
+hasil = linear_search(angka, cari)
+print("Linear Search:")
+if hasil != -1:
+    print(f"Data {cari} ditemukan pada indeks {hasil}")
+else:
+    print(f"Data {cari} tidak ditemukan")
+
+# Algoritma Binary Search
+# Mencari data dengan membagi dua bagian setiap langkahnya
+
+def binary_search(data, target):
+    kiri = 0
+    kanan = len(data) - 1
+
+    while kiri <= kanan:
+        tengah = (kiri + kanan) // 2
+
+        if data[tengah] == target:
+            return tengah
+        elif data[tengah] < target:
+            kiri = tengah + 1
+        else:
+            kanan = tengah - 1
+
+    return -1
+
+# Contoh penggunaan
+angka_sorted = [2, 4, 6, 8, 10, 12, 14, 16]
+cari = 12
+
+hasil = binary_search(angka_sorted, cari)
+print("\nBinary Search:")
+if hasil != -1:
+    print(f"Data {cari} ditemukan pada indeks {hasil}")
+else:
+    print(f"Data {cari} tidak ditemukan")
 

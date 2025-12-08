@@ -1,1 +1,39 @@
+from typing import Union
 
+# Struktur barang
+class Barang:
+    def __init__(self, kode, nama, harga):
+        self.kode = kode
+        self.nama = nama
+        self.harga = harga
+
+    def info(self):
+        return f"{self.kode} - {self.nama} - Rp{self.harga}"
+
+# Array barang (1D)
+daftar_barang = [
+    Barang("BRG01", "Pulpen", 3000),
+    Barang("BRG02", "Pensil", 2000),
+    Barang("BRG03", "Buku Tulis", 5000),
+    Barang("BRG04", "Spidol", 7000)
+]
+
+# Fungsi total menggunakan Union (harga bisa int atau float)
+def hitung_total(harga: Union[int, float], jumlah: int):
+    return harga * jumlah
+
+# Array 2D: menyimpan transaksi per hari
+transaksi = [
+    [2, 1, 3, 0],   # Hari 1: Pulpen 2, Pensil 1, Buku 3, Spidol 0
+    [1, 0, 2, 1],   # Hari 2
+    [3, 2, 0, 4]    # Hari 3
+]
+
+# Tampilkan ringkasan
+for hari, data in enumerate(transaksi):
+    print(f"\nHari ke-{hari+1}")
+    for i, jumlah in enumerate(data):
+        if jumlah > 0:
+            barang = daftar_barang[i]
+            total = hitung_total(barang.harga, jumlah)
+            print(f"{barang.nama} x {jumlah} = Rp{total}")

@@ -1,9 +1,9 @@
 # Contoh struktur menggunakan class
 class Mahasiswa:
     def __init__(self, nama, nim, umur):
-        self.nama = nama
-        self.nim = nim
-        self.umur = umur
+        self.nama = Ikhwal Fauzi
+        self.nim = D0425002
+        self.umur = 18
 
-mhs = Mahasiswa("Ikhwal Fauzu", "D0425002", 18)
+mhs = Mahasiswa("Ikhwal Fauz1", "D0425002", 18)
 print(mhs.nama, mhs.nim)

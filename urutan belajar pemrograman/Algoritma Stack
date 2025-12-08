@@ -1,1 +1,74 @@
+# ==========================================
+# IMPLEMENTASI STACK MENGGUNAKAN CLASS
+# ==========================================
 
+class Stack:
+    def __init__(self):
+        # Stack disimpan dalam list Python
+        self.items = []
+
+    def is_empty(self):
+        # Mengecek apakah stack kosong
+        return len(self.items) == 0
+
+    def push(self, item):
+        # Menambahkan elemen ke puncak stack
+        self.items.append(item)
+        print(f"Push: {item} masuk ke stack.")
+
+    def pop(self):
+        # Menghapus elemen teratas
+        if self.is_empty():
+            print("Stack kosong! Tidak dapat pop.")
+            return None
+        removed = self.items.pop()
+        print(f"Pop : {removed} dikeluarkan dari stack.")
+        return removed
+
+    def peek(self):
+        # Melihat elemen teratas
+        if self.is_empty():
+            return None
+        return self.items[-1]
+
+    def size(self):
+        # Mengembalikan jumlah elemen di stack
+        return len(self.items)
+
+    def display(self):
+        # Menampilkan isi stack dari atas ke bawah
+        print("Isi stack (atas → bawah):")
+        for i in reversed(self.items):
+            print(" -", i)
+        print()
+
+
+# ==========================================
+# CONTOH PENGGUNAAN STACK
+# ==========================================
+
+stack = Stack()
+
+# Push beberapa elemen
+stack.push("A")
+stack.push("B")
+stack.push("C")
+
+stack.display()
+
+# Melihat elemen teratas
+print("Elemen teratas:", stack.peek())
+
+# Pop elemen dari stack
+stack.pop()
+stack.display()
+
+# Cek ukuran stack
+print("Ukuran stack:", stack.size())
+
+# Pop semua elemen
+stack.pop()
+stack.pop()
+
+# Coba pop saat stack kosong
+stack.pop()

@@ -1,1 +1,93 @@
+#=============
+# Shell Short
+#=============
 
+def shell_sort(data):
+    n = len(data)
+    gap = n // 2
+
+    print("Mulai Shell Sort...")
+
+    while gap > 0:
+        print(f"\nGap: {gap}")
+
+        for i in range(gap, n):
+            temp = data[i]
+            j = i
+
+            print(f"Bandingkan untuk posisi {i}: {temp}")
+
+            # Insertion sort versi gap
+            while j >= gap and data[j - gap] > temp:
+                data[j] = data[j - gap]
+                j -= gap
+
+            data[j] = temp
+
+        gap //= 2
+
+    return data
+
+angka = [12, 34, 54, 2, 3]
+print("Hasil:", shell_sort(angka))
+
+#=============
+# Merge Short
+#=============
+
+def merge_sort(data):
+    if len(data) > 1:
+        mid = len(data) // 2
+        left = data[:mid]
+        right = data[mid:]
+
+        merge_sort(left)
+        merge_sort(right)
+
+        i = j = k = 0
+        
+        # Gabungkan kedua list
+        while i < len(left) and j < len(right):
+            print(f"Bandingkan {left[i]} dan {right[j]}")
+            if left[i] < right[j]:
+                data[k] = left[i]
+                i += 1
+            else:
+                data[k] = right[j]
+                j += 1
+            k += 1
+
+        while i < len(left):
+            data[k] = left[i]
+            i += 1
+            k += 1
+
+        while j < len(right):
+            data[k] = right[j]
+            j += 1
+            k += 1
+
+    return data
+
+angka = [38, 27, 43, 3, 9, 82, 10]
+print("Hasil:", merge_sort(angka))
+
+#=============
+# Quick Short
+#=============
+
+def quick_sort(data):
+    if len(data) <= 1:
+        return data
+
+    pivot = data[len(data) // 2]
+    print(f"Pivot: {pivot}")
+
+    left = [x for x in data if x < pivot]
+    mid  = [x for x in data if x == pivot]
+    right = [x for x in data if x > pivot]
+
+    return quick_sort(left) + mid + quick_sort(right)
+
+angka = [10, 7, 8, 9, 1, 5]
+print("Hasil:", quick_sort(angka))

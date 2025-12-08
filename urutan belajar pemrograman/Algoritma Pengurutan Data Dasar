@@ -1,1 +1,69 @@
+# ============
+# BUBBLE SORT
+# ============
 
+def bubble_sort(arr):
+    n = len(arr)
+    print("Proses Bubble Sort:")
+    for i in range(n):
+        print(f"--- Iterasi ke-{i+1} ---")
+        for j in range(0, n - i - 1):
+            print(f"Bandingkan {arr[j]} dan {arr[j+1]}")
+            if arr[j] > arr[j+1]:
+                print(f"Tukar {arr[j]} dengan {arr[j+1]}")
+                arr[j], arr[j+1] = arr[j+1], arr[j]
+        print("Hasil sementara:", arr)
+    return arr
+
+
+data = [5, 1, 4, 2, 8]
+print("Hasil akhir:", bubble_sort(data))
+
+# ===============
+# SELECTION SORT
+# ===============
+
+def selection_sort(arr):
+    n = len(arr)
+    print("Proses Selection Sort:")
+    for i in range(n):
+        min_index = i
+        print(f"--- Iterasi ke-{i+1} ---")
+        for j in range(i + 1, n):
+            print(f"Bandingkan {arr[j]} dengan {arr[min_index]}")
+            if arr[j] < arr[min_index]:
+                min_index = j
+
+        print(f"Tukar {arr[i]} dengan {arr[min_index]}")
+        arr[i], arr[min_index] = arr[min_index], arr[i]
+        print("Hasil sementara:", arr)
+    return arr
+
+
+data = [64, 25, 12, 22, 11]
+print("Hasil akhir:", selection_sort(data))
+
+# ===============
+# INSERTION SORT
+# ===============
+
+def insertion_sort(arr):
+    print("Proses Insertion Sort:")
+    for i in range(1, len(arr)):
+        key = arr[i]
+        j = i - 1
+        print(f"--- Iterasi ke-{i} ---")
+        print(f"Key = {key}")
+
+        while j >= 0 and key < arr[j]:
+            print(f"Geser {arr[j]} ke kanan")
+            arr[j + 1] = arr[j]
+            j -= 1
+
+        arr[j + 1] = key
+        print("Hasil sementara:", arr)
+    return arr
+
+
+data = [12, 11, 13, 5, 6]
+print("Hasil akhir:", insertion_sort(data))

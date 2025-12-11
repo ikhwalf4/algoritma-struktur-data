@@ -10,5 +10,9 @@ data_mahasiswa = {
     "semester": 1
 }
 
-print("Nama:", data_ikhwal["nama"])
-print("NIM:", data_ikhwal["nim"])
+print("Nama:", data_mahasiswa["nama"])
+print("NIM:", data_mahasiswa["nim"])
+
+# Output
+#Nama: Ikhwal Fauzi
+#NIM: D0425002

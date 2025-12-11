@@ -1,44 +1,97 @@
 # Ikhwal Fauzi
 # D0425002
-#finaltest
+# finaltest
 
 #===SINGLE STACK===
 
-class Stack:
-    def __init__(self):
-        self.data = []
+MAX = 10
+stack_single = []
+top_single = -1
 
-    def push(self, value):
-        self.data.append(value)
+def push_single(data):
+    global top_single
+    if top_single == MAX - 1:
+        print("Stack Single penuh!")
+    else:
+        top_single += 1
+        stack_single.append(data)
+        print(f"Push Single: {data}")
 
-    def pop(self):
-        return self.data.pop()
+def pop_single():
+    global top_single
+    if top_single == -1:
+        print("Stack Single kosong!")
+    else:
+        print(f"Pop Single: {stack_single[top_single]}")
+        stack_single.pop()
+        top_single -= 1
 
-    def is_empty(self):
-        return len(self.data) == 0
+def print_single():
+    if top_single == -1:
+        print("Stack Single kosong!")
+    else:
+        print("Isi Stack Single:")
+        for i in range(top_single, -1, -1):
+            print(stack_single[i])
+
+#===STACK DOUBLE===
+
+stack_double = [None] * MAX
+top1 = -1
+top2 = MAX
+
+def push1(data):
+    global top1, top2
+    if top1 + 1 == top2:
+        print("Stack Double penuh! (Stack1)")
+    else:
+        top1 += 1
+        stack_double[top1] = data
+        print(f"Push Stack1: {data}")
+
+def push2(data):
+    global top1, top2
+    if top2 - 1 == top1:
+        print("Stack Double penuh! (Stack2)")
+    else:
+        top2 -= 1
+        stack_double[top2] = data
+        print(f"Push Stack2: {data}")
+
+def pop1():
+    global top1
+    if top1 == -1:
+        print("Stack1 kosong!")
+    else:
+        print(f"Pop Stack1: {stack_double[top1]}")
+        top1 -= 1
+
+def pop2():
+    global top2
+    if top2 == MAX:
+        print("Stack2 kosong!")
+    else:
+        print(f"Pop Stack2: {stack_double[top2]}")
+        top2 += 1
 
 
-def reverse_string(text):
-    st = Stack()
 
-    for ch in text:       # push semua karakter
-        st.push(ch)
+#===Contoh Eksekusi===
 
-    result = ""
-    while not st.is_empty():   # pop untuk membalik
-        result += st.pop()
+if __name__ == "__main__":
+    print("=== STACK SINGLE ===")
+    push_single(10)
+    push_single(20)
+    push_single(30)
+    print_single()
+    pop_single()
+    print_single()
 
-    return result
+    print("\n=== STACK DOUBLE ===")
+    push1(10)
+    push1(20)
+    push2(99)
+    push2(88)
 
-
-#===CONTOH PENGGUNAAN===
-kalimat = "IKHWAL FAUZI"
-print("Asli   :", kalimat)
-print("Balik  :", reverse_string(kalimat))
-
-# Output
-# Asli   : IKHWAL FAUZI
-# Balik  : IZUAF LAWHKI
-
-#===Double Stack===
-
+    pop1()
+    pop2()

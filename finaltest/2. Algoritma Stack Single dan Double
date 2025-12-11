@@ -95,3 +95,25 @@ if __name__ == "__main__":
 
     pop1()
     pop2()
+
+# Output
+#=== STACK SINGLE ===
+Push Single: 10
+Push Single: 20
+Push Single: 30
+Isi Stack Single:
+30
+20
+10
+Pop Single: 30
+Isi Stack Single:
+20
+10
+
+=== STACK DOUBLE ===
+Push Stack1: 10
+Push Stack1: 20
+Push Stack2: 99
+Push Stack2: 88
+Pop Stack1: 20
+Pop Stack2: 88

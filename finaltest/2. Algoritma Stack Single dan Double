@@ -1,1 +1,44 @@
+# Ikhwal Fauzi
+# D0425002
+#finaltest
+
+#===SINGLE STACK===
+
+class Stack:
+    def __init__(self):
+        self.data = []
+
+    def push(self, value):
+        self.data.append(value)
+
+    def pop(self):
+        return self.data.pop()
+
+    def is_empty(self):
+        return len(self.data) == 0
+
+
+def reverse_string(text):
+    st = Stack()
+
+    for ch in text:       # push semua karakter
+        st.push(ch)
+
+    result = ""
+    while not st.is_empty():   # pop untuk membalik
+        result += st.pop()
+
+    return result
+
+
+#===CONTOH PENGGUNAAN===
+kalimat = "IKHWAL FAUZI"
+print("Asli   :", kalimat)
+print("Balik  :", reverse_string(kalimat))
+
+# Output
+# Asli   : IKHWAL FAUZI
+# Balik  : IZUAF LAWHKI
+
+#===Double Stack===
 

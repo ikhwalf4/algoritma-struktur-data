@@ -1,1 +1,10 @@
+# Ikhwal Fauzi
+# D0425002
+# finaltest
 
+# Tipe Data Utama
+umur = 18          # integer
+tinggi = 162.5     # float
+nama = "Ikhwal"     # string
+aktif = True       # boolean tambahan
+buah = ["mangga", "pisang", "durian"]    # list

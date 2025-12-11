@@ -2,7 +2,8 @@
 # D0425002
 # finaltest
 
-# Tipe Data Utama
+#===Tipe Data Utama===
+
 umur = 18          # integer
 tinggi = 162.5     # float
 nama = "Ikhwal"     # string

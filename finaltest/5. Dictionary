@@ -1,1 +1,14 @@
+# Ikhwal Fauzi
+# D0425002
+# finaltest
 
+data_mahasiswa = {
+    "nama": "Ikhwal Fauzi",
+    "nim": "D0425002",
+    "jurusan": "Sistem Informasi",
+    "kelas" : "A",
+    "semester": 1
+}
+
+print("Nama:", data_ikhwal["nama"])
+print("NIM:", data_ikhwal["nim"])

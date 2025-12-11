@@ -1,1 +1,71 @@
+# Ikhwal Fauzi
+# D0425002
+# finaltest
 
+#===Binary Search===
+def binary_search(arr, x):
+    low = 0
+    high = len(arr) - 1
+
+    while low <= high:
+        mid = (low + high) // 2
+
+        if arr[mid] == x:
+            return mid  # posisi ketemu
+        elif arr[mid] < x:
+            low = mid + 1
+        else:
+            high = mid - 1
+
+    return -1  # tidak ketemu
+
+# Contoh Penggunaan
+data = [5, 10, 15, 20, 25, 30]
+cari = 20
+
+hasil = binary_search(data, cari)
+
+print("Data:", data)
+print("Mencari:", cari)
+print("Hasil:", "Ketemu di indeks " + str(hasil) if hasil != -1 else "Tidak ketemu")
+
+# Output
+#Data: [5, 10, 15, 20, 25, 30]
+#Mencari: 30
+#Hasil: Ketemu di indeks 5
+
+
+#===Interpolation Search===
+
+def interpolation_search(arr, x):
+    low = 0
+    high = len(arr) - 1
+
+    while low <= high and x >= arr[low] and x <= arr[high]:
+
+        # Estimasi posisi (interpolasi)
+        mid = low + ((x - arr[low]) * (high - low)) // (arr[high] - arr[low])
+
+        if arr[mid] == x:
+            return mid
+        elif arr[mid] < x:
+            low = mid + 1
+        else:
+            high = mid - 1
+
+    return -1  # tidak ketemu
+
+# Contoh Penggunaan
+data = [5, 10, 15, 20, 25, 30]
+cari = 25
+
+hasil = interpolation_search(data, cari)
+
+print("Data:", data)
+print("Mencari:", cari)
+print("Hasil:", "Ketemu di indeks " + str(hasil) if hasil != -1 else "Tidak ketemu")
+
+# Output
+#Data: [5, 10, 15, 20, 25, 30]
+#Mencari: 25
+#Hasil: Ketemu di indeks 4

@@ -2,11 +2,11 @@
 # D0425002
 # finaltest
 
-# Array 1 Dimensi
+#===Array 1 Dimensi===
 buah = ["mangga", "durian", "semangka", "rambutan"]
 print("Buah ke-2:", buah[1])
 
-# Array 2 Dimensi
+#===Array 2 Dimensi===
 nilai_kelas = [
     [87, 93, 79],
     [88, 91, 82],
@@ -14,7 +14,7 @@ nilai_kelas = [
 ]
 print("Nilai baris ke-2 kolom ke-3:", nilai_kelas[1][2])
 
-# Array 3 Dimensi
+#===Array 3 Dimensi===
 data_toko = [
     [
         ["susu", 10], 

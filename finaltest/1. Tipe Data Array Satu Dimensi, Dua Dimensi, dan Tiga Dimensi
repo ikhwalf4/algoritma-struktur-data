@@ -26,3 +26,9 @@ data_toko = [
     ]
 ]
 print("Nama barang:", data_toko[0][1][0])
+
+
+# Output
+#Buah ke-2: durian
+#Nilai baris ke-2 kolom ke-3: 82
+#Nama barang: roti
